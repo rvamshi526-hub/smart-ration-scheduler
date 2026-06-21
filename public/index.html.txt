@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Ration Slot Booking</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Smart Ration Allocation System</h1>
+        <p class="subtitle">Skip the queue: Select your locality to book a secure collection slot.</p>
+
+        <!-- District Selection -->
+        <div class="section">
+            <label class="field-label">1. Select District</label>
+            <div id="district-container" class="district-grid"></div>
+        </div>
+
+        <!-- Mandal Selection Dropdown -->
+        <div class="section hidden" id="mandal-section">
+            <label for="mandal-select" class="field-label">2. Select Mandal / Circle</label>
+            <select id="mandal-select">
+                <option value="">-- Choose Mandal --</option>
+            </select>
+        </div>
+
+        <!-- Village/Ward Selection Dropdown -->
+        <div class="section hidden" id="village-section">
+            <label for="village-select" class="field-label">3. Select Village / Ward Area</label>
+            <select id="village-select">
+                <option value="">-- Choose Location --</option>
+            </select>
+        </div>
+
+        <!-- Ration Shop Dropdown -->
+        <div class="section hidden" id="shop-section">
+            <label for="shop-select" class="field-label">4. Select Allocated Fair Price Shop (FPS)</label>
+            <select id="shop-select">
+                <option value="">-- Choose Fair Price Shop --</option>
+            </select>
+        </div>
+
+        <!-- Time Slot Selection Grid -->
+        <div class="section hidden" id="slots-section">
+            <label class="field-label">5. Available Pickup & Verification Time-Slots</label>
+            <div id="slots-container" class="slots-grid"></div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
