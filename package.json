@@ -1,7 +1,7 @@
 {
-  "name": "ration-bms-app",
+  "name": "smart-ration-scheduler",
   "version": "1.0.0",
-  "description": "A BookMyShow style workflow for booking Smart Ration Shop slots to eliminate queues",
+  "description": "Smart PDS Portal with immersive Telangana graphics and BookMyShow styled booking flow",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"

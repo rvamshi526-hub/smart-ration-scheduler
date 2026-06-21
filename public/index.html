@@ -3,48 +3,55 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Smart Ration Slot Booking</title>
+    <title>Telangana Smart PDS Portal</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="container">
-        <h1>Smart Ration Allocation System</h1>
-        <p class="subtitle">Skip the queue: Select your locality to book a secure collection slot.</p>
 
-        <!-- District Selection -->
-        <div class="section">
-            <label class="field-label">1. Select District</label>
-            <div id="district-container" class="district-grid"></div>
+    <div id="home-screen" class="welcome-overlay">
+        <div class="welcome-card">
+            <h1>Telangana Smart PDS</h1>
+            <p>Civil Supplies & Queue Management Portal</p>
+            <button id="enter-btn" class="main-cta-btn">ENTER PORTAL</button>
+        </div>
+    </div>
+
+    <div id="main-application" class="container hidden">
+        <header>
+            <h2>Smart Ration Allocation Scheduler</h2>
+            <p>Skip the physical lines. Secure your collection timeslot online.</p>
+        </header>
+
+        <div class="flow-step">
+            <label class="step-title">Step 1: Select District</label>
+            <div id="district-grid-container" class="district-flex-grid">
+                </div>
         </div>
 
-        <!-- Mandal Selection Dropdown -->
-        <div class="section hidden" id="mandal-section">
-            <label for="mandal-select" class="field-label">2. Select Mandal / Circle</label>
+        <div class="flow-step hidden" id="mandal-box">
+            <label for="mandal-select" class="step-title">Step 2: Select Mandal</label>
             <select id="mandal-select">
                 <option value="">-- Choose Mandal --</option>
             </select>
         </div>
 
-        <!-- Village/Ward Selection Dropdown -->
-        <div class="section hidden" id="village-section">
-            <label for="village-select" class="field-label">3. Select Village / Ward Area</label>
+        <div class="flow-step hidden" id="village-box">
+            <label for="village-select" class="step-title">Step 3: Select Village / Locality</label>
             <select id="village-select">
-                <option value="">-- Choose Location --</option>
+                <option value="">-- Choose Village --</option>
             </select>
         </div>
 
-        <!-- Ration Shop Dropdown -->
-        <div class="section hidden" id="shop-section">
-            <label for="shop-select" class="field-label">4. Select Allocated Fair Price Shop (FPS)</label>
+        <div class="flow-step hidden" id="shop-box">
+            <label for="shop-select" class="step-title">Step 4: Select Fair Price Shop (FPS)</label>
             <select id="shop-select">
-                <option value="">-- Choose Fair Price Shop --</option>
+                <option value="">-- Choose Shop Dealer --</option>
             </select>
         </div>
 
-        <!-- Time Slot Selection Grid -->
-        <div class="section hidden" id="slots-section">
-            <label class="field-label">5. Available Pickup & Verification Time-Slots</label>
-            <div id="slots-container" class="slots-grid"></div>
+        <div class="flow-step hidden" id="slots-box">
+            <label class="step-title">Step 5: Available Distribution Slots</label>
+            <div id="slots-flex" class="slots-flex-wrapper"></div>
         </div>
     </div>
 

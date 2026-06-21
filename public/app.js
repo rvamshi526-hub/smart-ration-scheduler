@@ -1,125 +1,132 @@
-let locationData = [];
-let selectedDistrict = null;
-let selectedMandal = null;
-let selectedVillage = null;
+let coreData = [];
+let targetDistrict = null;
+let targetMandal = null;
+let targetVillage = null;
 
-const districtContainer = document.getElementById('district-container');
-const mandalSection = document.getElementById('mandal-section');
+// Structural elements hooks
+const homeScreen = document.getElementById('home-screen');
+const enterBtn = document.getElementById('enter-btn');
+const mainApp = document.getElementById('main-application');
+const districtGrid = document.getElementById('district-grid-container');
+
+const mandalBox = document.getElementById('mandal-box');
 const mandalSelect = document.getElementById('mandal-select');
-const villageSection = document.getElementById('village-section');
+const villageBox = document.getElementById('village-box');
 const villageSelect = document.getElementById('village-select');
-const shopSection = document.getElementById('shop-section');
+const shopBox = document.getElementById('shop-box');
 const shopSelect = document.getElementById('shop-select');
-const slotsSection = document.getElementById('slots-section');
-const slotsContainer = document.getElementById('slots-container');
+const slotsBox = document.getElementById('slots-box');
+const slotsFlex = document.getElementById('slots-flex');
 
-async function init() {
+// Entry triggers routing view transition
+enterBtn.addEventListener('click', () => {
+    homeScreen.classList.add('hidden');
+    mainApp.classList.remove('hidden');
+});
+
+async function loadPortalData() {
     try {
         const response = await fetch('/api/locations');
         const data = await response.json();
-        locationData = data.districts;
-        renderDistricts();
-    } catch (error) {
-        console.error("Error connecting to localized setup infrastructure:", error);
+        coreData = data.districts;
+        buildDistrictGrid();
+    } catch (err) {
+        console.error("Failed loading data tree configuration:", err);
     }
 }
 
-function renderDistricts() {
-    districtContainer.innerHTML = '';
-    locationData.forEach(dist => {
-        const card = document.createElement('div');
-        card.className = 'district-card';
-        card.innerHTML = `
-            <h3>${dist.name} District</h3>
-            <p><strong>Historic Milestone:</strong> ${dist.historicPlace}</p>
+function buildDistrictGrid() {
+    districtGrid.innerHTML = '';
+    coreData.forEach(dist => {
+        const rectCard = document.createElement('div');
+        rectCard.className = 'rectangle-dist-card';
+        
+        rectCard.innerHTML = `
+            <div class="card-bg-overlay" style="background-image: url('${dist.bgImage}')"></div>
+            <div class="card-content">
+                <h3>${dist.name}</h3>
+                <p>📍 ${dist.historicPlace}</p>
+            </div>
         `;
-        card.addEventListener('click', () => selectDistrict(dist, card));
-        districtContainer.appendChild(card);
+        
+        rectCard.addEventListener('click', () => handleDistrictSelection(dist, rectCard));
+        districtGrid.appendChild(rectCard);
     });
 }
 
-function selectDistrict(dist, cardElement) {
-    document.querySelectorAll('.district-card').forEach(el => el.classList.remove('active'));
-    cardElement.classList.add('active');
+function handleDistrictSelection(dist, element) {
+    document.querySelectorAll('.rectangle-dist-card').forEach(c => c.classList.remove('selected-active'));
+    element.classList.add('selected-active');
     
-    selectedDistrict = dist;
-    resetFlow(['mandal', 'village', 'shop', 'slots']);
+    targetDistrict = dist;
+    wipeCascadeSteps(['mandal', 'village', 'shop', 'slots']);
 
     mandalSelect.innerHTML = '<option value="">-- Choose Mandal --</option>';
-    dist.mandals.forEach(mandal => {
+    dist.mandals.forEach(m => {
         const opt = document.createElement('option');
-        opt.value = mandal.id;
-        opt.textContent = mandal.name;
+        opt.value = m.id;
+        opt.textContent = m.name;
         mandalSelect.appendChild(opt);
     });
-    mandalSection.classList.remove('hidden');
+    mandalBox.classList.remove('hidden');
 }
 
 mandalSelect.addEventListener('change', (e) => {
-    const mandalId = e.target.value;
-    if (!mandalId) {
-        resetFlow(['village', 'shop', 'slots']);
-        return;
-    }
+    const mId = e.target.value;
+    if (!mId) { wipeCascadeSteps(['village', 'shop', 'slots']); return; }
     
-    selectedMandal = selectedDistrict.mandals.find(m => m.id === mandalId);
-    resetFlow(['village', 'shop', 'slots']);
+    targetMandal = targetDistrict.mandals.find(m => m.id === mId);
+    wipeCascadeSteps(['village', 'shop', 'slots']);
 
-    villageSelect.innerHTML = '<option value="">-- Choose Location --</option>';
-    selectedMandal.villages.forEach(v => {
+    villageSelect.innerHTML = '<option value="">-- Choose Village --</option>';
+    targetMandal.villages.forEach(v => {
         const opt = document.createElement('option');
         opt.value = v.id;
         opt.textContent = v.name;
         villageSelect.appendChild(opt);
     });
-    villageSection.classList.remove('hidden');
+    villageBox.classList.remove('hidden');
 });
 
 villageSelect.addEventListener('change', (e) => {
-    const villageId = e.target.value;
-    if (!villageId) {
-        resetFlow(['shop', 'slots']);
-        return;
-    }
+    const vId = e.target.value;
+    if (!vId) { wipeCascadeSteps(['shop', 'slots']); return; }
 
-    selectedVillage = selectedMandal.villages.find(v => v.id === villageId);
-    resetFlow(['shop', 'slots']);
+    targetVillage = targetMandal.villages.find(v => v.id === vId);
+    wipeCascadeSteps(['shop', 'slots']);
 
-    shopSelect.innerHTML = '<option value="">-- Choose Fair Price Shop --</option>';
-    selectedVillage.shops.forEach(shop => {
+    shopSelect.innerHTML = '<option value="">-- Choose Shop Dealer --</option>';
+    targetVillage.shops.forEach(s => {
         const opt = document.createElement('option');
-        opt.value = shop.id;
-        opt.textContent = shop.name;
+        opt.value = s.id;
+        opt.textContent = s.name;
         shopSelect.appendChild(opt);
     });
-    shopSection.classList.remove('hidden');
+    shopBox.classList.remove('hidden');
 });
 
 shopSelect.addEventListener('change', (e) => {
-    const shopId = e.target.value;
-    if (!shopId) {
-        resetFlow(['slots']);
-        return;
-    }
+    const sId = e.target.value;
+    if (!sId) { wipeCascadeSteps(['slots']); return; }
 
-    const selectedShop = selectedVillage.shops.find(s => s.id === shopId);
-    slotsContainer.innerHTML = '';
+    const targetShop = targetVillage.shops.find(s => s.id === sId);
+    slotsFlex.innerHTML = '';
     
-    selectedShop.slots.forEach(slot => {
-        const btn = document.createElement('button');
-        btn.className = 'slot-btn';
-        btn.textContent = slot;
-        btn.onclick = () => alert(`Ration Time-Slot Confirmed!\nLocation: ${selectedShop.name}\nWindow: ${slot}\nPlease carry your original Ration Card & biometric details.`);
-        slotsContainer.appendChild(btn);
+    targetShop.slots.forEach(slot => {
+        const pill = document.createElement('button');
+        pill.className = 'time-slot-pill';
+        pill.textContent = slot;
+        pill.onclick = () => alert(`Ration Pickup Confirmed!\nStore: ${targetShop.name}\nTime-Window: ${slot}`);
+        slotsFlex.appendChild(pill);
     });
-    slotsSection.classList.remove('hidden');
+    slotsBox.classList.remove('hidden');
 });
 
-function resetFlow(targets) {
-    if (targets.includes('mandal')) mandalSection.classList.add('hidden');
-    if (targets.includes('village')) villageSection.classList.add('hidden');
-    if (targets.includes('shop')) shopSection.classList.add('hidden');
-    if (targets.includes('slots')) slotsSection.classList.add('hidden');
+function wipeCascadeSteps(levels) {
+    if (levels.includes('mandal')) mandalBox.classList.add('hidden');
+    if (levels.includes('village')) villageBox.classList.add('hidden');
+    if (levels.includes('shop')) shopBox.classList.add('hidden');
+    if (levels.includes('slots')) slotsBox.classList.add('hidden');
 }
 
-init();
+loadPortalData();

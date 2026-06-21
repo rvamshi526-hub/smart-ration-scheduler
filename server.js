@@ -6,13 +6,14 @@ const PORT = process.env.PORT || 3000;
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Mock Data specialized for PDS / Smart Ration Flow
+// Rich data structure with custom landscape/landmark cover backgrounds
 const mockData = {
     districts: [
         {
             id: "dist-01",
             name: "Hyderabad",
-            historicPlace: "Charminar - Historic 16th-century central hub of the old city grid.",
+            bgImage: "https://images.unsplash.com/photo-1605305141974-9f448c5b6167?auto=format&fit=crop&w=600&q=80", // Charminar landscape
+            historicPlace: "Charminar",
             mandals: [
                 {
                     id: "man-101",
@@ -22,16 +23,15 @@ const mockData = {
                             id: "vil-201",
                             name: "Laad Bazaar Colony",
                             shops: [
-                                { id: "shop-301", name: "FPS Shop No. 15 (Dealer: R. Reddy)", slots: ["08:30 AM - Rice/Wheat", "10:30 AM - General Distribution", "03:00 PM - Sugar/Oil"] },
-                                { id: "shop-302", name: "FPS Shop No. 18 (Dealer: M. A. Khan)", slots: ["09:00 AM - Priority Cards", "11:30 AM - Regular Quota", "04:30 PM - Evening Batch"] }
+                                { id: "shop-301", name: "FPS Shop No. 15 (Dealer: R. Reddy)", slots: ["08:30 AM", "10:30 AM", "03:00 PM"] },
+                                { id: "shop-302", name: "FPS Shop No. 18 (Dealer: M. A. Khan)", slots: ["09:00 AM", "11:30 AM", "04:30 PM"] }
                             ]
                         },
                         {
                             id: "vil-202",
                             name: "Nayapul Sector",
                             shops: [
-                                { id: "shop-303", name: "FPS Shop No. 42 (Dealer: S. Sharma)", slots: ["08:00 AM - Early Bird", "01:00 PM - Afternoon Slot"] },
-                                { id: "shop-304", name: "FPS Shop No. 45 (Dealer: G. Kaur)", slots: ["10:00 AM - Fast Track", "03:30 PM - General Delivery"] }
+                                { id: "shop-303", name: "FPS Shop No. 42 (Dealer: S. Sharma)", slots: ["08:00 AM", "01:00 PM"] }
                             ]
                         }
                     ]
@@ -41,7 +41,8 @@ const mockData = {
         {
             id: "dist-02",
             name: "Warangal",
-            historicPlace: "Thousand Pillar Temple - Landmark architectural marvel of the Kakatiya legacy.",
+            bgImage: "https://images.unsplash.com/photo-1624314140321-df19ea0bf39a?auto=format&fit=crop&w=600&q=80", // Warangal Fort/Gate
+            historicPlace: "Thousand Pillar Temple",
             mandals: [
                 {
                     id: "man-102",
@@ -51,8 +52,8 @@ const mockData = {
                             id: "vil-203",
                             name: "Palampet Revenue Village",
                             shops: [
-                                { id: "shop-305", name: "FPS Rural Center 101", slots: ["07:30 AM - Morning Batch", "02:30 PM - Post-Lunch Quota"] },
-                                { id: "shop-306", name: "FPS Rural Center 102", slots: ["09:30 AM - Commodity Collect", "04:00 PM - Final Hour Open"] }
+                                { id: "shop-305", name: "FPS Rural Center 101", slots: ["07:30 AM", "02:30 PM"] },
+                                { id: "shop-306", name: "FPS Rural Center 102", slots: ["09:30 AM", "04:00 PM"] }
                             ]
                         }
                     ]
@@ -67,5 +68,5 @@ app.get('/api/locations', (req, res) => {
 });
 
 app.listen(PORT, () => {
-    console.log(`Smart Ration Server running live at http://localhost:${PORT}`);
+    console.log(`Production UI Portal alive at http://localhost:${PORT}`);
 });
